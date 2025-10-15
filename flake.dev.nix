@@ -1,8 +1,9 @@
 {
   description = "Dev project";
 
+  # Replace "nix-pack" with your master package set
   inputs = {
-    nix-pack.url = "git+ssh://git@github.com/composewell/nix-pack?rev=3fde7de1a8af92f849a83c4fc24a301923b8e2b8";
+    nix-pack.url = "github:composewell/nix-pack/b3db598aa29533646b13a94aca3fee8ead622d06";
     nixpkgs.follows = "nix-pack/nixpkgs";
     nixpkgs-darwin.follows = "nix-pack/nixpkgs-darwin";
   };
@@ -20,7 +21,7 @@
             config.allowBroken = true;
           };
       envOptions = {
-            name = "aws-lightsail-debian-env";
+            name = "my-project";
             sources = nixpack.lib.mergeSources src1 src2;
             packages = import ./packages.nix;
             compiler = "ghc96";
