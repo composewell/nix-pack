@@ -9,12 +9,6 @@ nix build "git+ssh://git@github.com/composewell/nix-pack.git#streamly"
 
 ## Example `flake.nix` for sub projects
 
-**NOTE:** Eventually, all the composewell packages that we build or
-use should be listed in sources.nix and packages.nix files in this
-repository. However, for rapid development it is more convenient to
-create a local flake file. There is no hard and fast rule so do what's
-convenient.
-
 Copy the `flake.nix.sample` file in the project repo, update the
 nix-pack repo revision in it and add a `sources.nix` and
 `packages.nix` file.
