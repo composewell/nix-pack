@@ -77,7 +77,7 @@ For example, you can do that by running these commands from the repo root:
 ```
 nix-build -E '
   let
-    nixpackSrc = builtins.fetchTarball "https://github.com/composewell/nix-pack/archive/b3db598aa.tar.gz";
+    nixpackSrc = builtins.fetchTarball "https://github.com/composewell/nix-pack/archive/d8c97426bd697.tar.gz";
     nixpack = import (nixpackSrc + "/nix");
   in nixpack.listSources { sources = ./sources.nix; }
 '
