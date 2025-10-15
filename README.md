@@ -9,7 +9,7 @@ or if you prefer flakes you can use a `flake.nix`.
 If you want to bundle all your projects in one place and build them
 consistently as a set with a single build command or make them
 all available in a nix shell -- you can conveniently specify such
-an environment using `nix-pack`. You can specify different layers
+an environment using `nixpack`. You can specify different layers
 overriding each other -- e.g. if you want packages from hackage only,
 or if you want hackge + overrides from your github repos, or you want
 hackage + github + your local repositories -- all these use cases are
@@ -26,7 +26,7 @@ in the `packages.nix` file.
 
 Example:
 ```
-nix build "git+ssh://git@github.com/composewell/nix-pack.git#streamly"
+nix build "git+ssh://git@github.com/composewell/nixpack.git#streamly"
 ```
 
 ## Override the Master set in a project
@@ -41,7 +41,7 @@ that to create a nix shell.
 ### Example `flake.nix` for dev projects
 
 Copy the `flake.dev.nix` file in the project repo, update the
-nix-pack repo revision in it and add a `sources.nix` and
+nixpack repo revision in it and add a `sources.nix` and
 `packages.nix` file.
 
 A sample `packages.nix`:
@@ -54,8 +54,8 @@ dev-packages = with nixpkgs.haskellPackages; [ streamly ];
 ```
 
 A sample `sources.nix`. Be careful to spell a name you are overriding from
-nix-pack correctly, if the name is different the override wll not
-occur and you will be using the version from nix-pack unknowingly:
+nixpack correctly, if the name is different the override wll not
+occur and you will be using the version from nixpack unknowingly:
 
 ```
 {nixpack}:
@@ -70,14 +70,14 @@ layers = [ { streamly = local ./.; } ];
 If any of the sources have been updated upstream you can find if the
 sources in your bundle or project are stale and eed to be updated.
 
-Use the `(nix-pack/nix).listSources` function to create a manifest of sources
-and use `nix-pack/bin/outdated.sh` on the result to find the stale sources.
+Use the `(nixpack/nix).listSources` function to create a manifest of sources
+and use `nixpack/bin/outdated.sh` on the result to find the stale sources.
 
 For example, you can do that by running these commands from the repo root:
 ```
 nix-build -E '
   let
-    nixpackSrc = builtins.fetchTarball "https://github.com/composewell/nix-pack/archive/d8c97426bd697.tar.gz";
+    nixpackSrc = builtins.fetchTarball "https://github.com/composewell/nixpack/archive/d8c97426bd697.tar.gz";
     nixpack = import (nixpackSrc + "/nix");
   in nixpack.listSources { sources = ./sources.nix; }
 '
