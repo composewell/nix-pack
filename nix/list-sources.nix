@@ -1,8 +1,8 @@
 { sources }:
 let
-  defenv = import ./default.nix;
+  nixpack = import ./default.nix;
   pkgs = import <nixpkgs> {};
-  srcs = import sources { inherit defenv; };
+  srcs = import sources { inherit nixpack; };
 
   # merge layer sets if they exist
   packages = pkgs.lib.attrsets.mergeAttrsList [
