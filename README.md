@@ -58,8 +58,8 @@ nix-pack correctly, if the name is different the override wll not
 occur and you will be using the version from nix-pack unknowingly:
 
 ```
-{defenv}:
-with defenv.sources;
+{nixpack}:
+with nixpack.sources;
 {
 layers = [ { streamly = local ./.; } ];
 }
