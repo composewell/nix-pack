@@ -1,0 +1,31 @@
+{
+  description = "Dev project";
+
+  inputs = {
+    nix-pack.url = "git+ssh://git@github.com/composewell/nix-pack?rev=3fde7de1a8af92f849a83c4fc24a301923b8e2b8";
+    nixpkgs.follows = "nix-pack/nixpkgs";
+    nixpkgs-darwin.follows = "nix-pack/nixpkgs-darwin";
+  };
+
+  outputs = { self, nixpkgs, nixpkgs-darwin, nix-pack }:
+    let
+      nixpack = nix-pack.nixpack;
+      src1 = import "${nix-pack}/sources.nix" { inherit nixpack; };
+      src2 = import ./sources.nix {inherit nixpack;};
+    in nixpack.flakeOutputs {
+      inherit nixpkgs;
+      inherit nixpkgs-darwin;
+      nixpkgsOptions = {
+            config.allowUnfree = true;
+            config.allowBroken = true;
+          };
+      envOptions = {
+            name = "aws-lightsail-debian-env";
+            sources = nixpack.lib.mergeSources src1 src2;
+            packages = import ./packages.nix;
+            compiler = "ghc96";
+            hoogle = false;
+            isDev = true;
+      };
+    };
+}
