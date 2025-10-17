@@ -30,7 +30,10 @@ let
         in acc.extend overrides
     ) base layers;
 
-  allLayers = foldExtend sources.layers haskellPackagesOrig;
+  allLayers =
+    foldExtend
+      (if sources ? layers then sources.layers else [])
+      haskellPackagesOrig;
 
   haskellPackages =
     if sources ? jailbreaks then
