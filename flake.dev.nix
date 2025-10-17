@@ -16,6 +16,7 @@
     in nixpack.flakeOutputs {
       inherit nixpkgs;
       inherit nixpkgs-darwin;
+      inherit nixpack;
       nixpkgsOptions = {
             config.allowUnfree = true;
             config.allowBroken = true;

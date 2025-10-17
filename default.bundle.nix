@@ -49,9 +49,12 @@ let src =
         url = "https://github.com/composewell/nixpack/archive/b3db598aa.tar.gz";
       };
     nixpack = import "${src}/nix";
+    nixpkgs1 = nixpkgs.extend (self: super: {
+      nixpack = nixpack;
+    });
     env =
       nixpack.mkEnv
-        { inherit nixpkgs;
+        { nixpkgs = nixpkgs1;
           name = "nixpack-env";
           sources = import ./sources.nix {inherit nixpack;};
           packages = import ./packages.nix;
