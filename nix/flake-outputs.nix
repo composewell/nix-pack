@@ -1,5 +1,6 @@
 { nixpkgs,
   nixpkgs-darwin,
+  nixpack,
   systems ?
       [
         "x86_64-linux"
@@ -29,11 +30,14 @@ let
         then nixpkgs-darwin
         else nixpkgs;
       pkgs = import nixpkgs1 (nixpkgsOptions // { inherit system; });
+      pkgs1 = pkgs.extend (self: super: {
+        nixpack = nixpack;
+      });
       env = import ./env.nix ({
         compiler = "default";
         hoogle = false;
         isDev = false;
-      } // envOptions // {nixpkgs = pkgs;});
+      } // envOptions // {nixpkgs = pkgs1;});
     in env;
 
 in {
