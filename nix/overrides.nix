@@ -44,7 +44,8 @@ let
 
   # XXX Use nixpkgs.fetchgit with sha256 for reproducibility
   deriveGit = super: drvLabel: url: rev: branch: subdir: flags: prof:
-    nixpkgs.haskell.lib.overrideCabal (let
+    builtins.trace "url=${url}"
+    (nixpkgs.haskell.lib.overrideCabal (let
       src = fetchGit {
         url = url;
         rev = rev;
@@ -56,7 +57,7 @@ let
       doHaddock = withHaddock;
       doCheck = false;
       configureFlags = flags;
-    });
+    }));
 
   makeOverrides = super: sources:
     builtins.mapAttrs (name: spec:
@@ -65,7 +66,10 @@ let
           deriveHackageProf super name spec.version spec.sha256
         else deriveHackage super name spec.version spec.sha256
       else if spec.type == "github" then
-        let url = sourceUtils.mkGithubURL spec.owner spec.repo;
+        let url =
+              if spec.https
+              then sourceUtils.mkGithubHttpsURL spec.owner spec.repo
+              else sourceUtils.mkGithubURL spec.owner spec.repo;
             drvLabel = "${spec.owner}/${spec.repo}";
         in deriveGit super drvLabel url spec.rev spec.branch spec.subdir spec.flags false
       else if spec.type == "local" then

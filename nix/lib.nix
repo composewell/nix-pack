@@ -81,7 +81,10 @@ in
           url =
             if repo_prefix != null
             then "${repo_prefix}/${spec.repo}"
-            else sources.mkGithubURL spec.owner spec.repo;
+            else
+              if spec.https
+              then sources.mkGithubHttpsURL spec.owner spec.repo
+              else sources.mkGithubURL spec.owner spec.repo;
           rev = spec.rev;
           ref = spec.branch;
       };

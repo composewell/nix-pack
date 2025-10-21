@@ -21,6 +21,7 @@ let
   };
 
 # type: "github"
+#   https:
 #   owner:
 #   repo:
 #   rev:
@@ -31,8 +32,12 @@ let
   mkGithubURL = owner: repo:
     "git@github.com:${owner}/${repo}.git";
 
+  mkGithubHttpsURL = owner: repo:
+    "https://github.com/${owner}/${repo}.git";
+
   githubAll = owner: repo: rev: branch: subdir: flags: {
     type = "github";
+    https = false;
     inherit owner repo rev branch subdir flags;
   };
 
@@ -74,6 +79,7 @@ in
   inherit hackage;
   inherit hackageProf;
   inherit mkGithubURL;
+  inherit mkGithubHttpsURL;
   inherit githubBranchFlags;
   inherit githubFlags;
   inherit githubBranch;
