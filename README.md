@@ -71,7 +71,7 @@ If any of the sources have been updated upstream you can find if the
 sources in your bundle or project are stale and eed to be updated.
 
 Use the `(nixpack/nix).listSources` function to create a manifest of sources
-and use `nixpack/bin/outdated.sh` on the result to find the stale sources.
+and use `nixpack/bin/nixpack-outdated.sh` on the result to find the stale sources.
 
 For example, you can do that by running these commands from the repo root:
 ```
@@ -81,5 +81,5 @@ nix-build -E '
     nixpack = import (nixpackSrc + "/nix");
   in nixpack.listSources { sources = ./sources.nix; }
 '
-bin/outdated.sh ./result
+bin/nixpack-outdated.sh ./result
 ```
