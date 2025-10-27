@@ -53,9 +53,11 @@ dev-packages = with nixpkgs.haskellPackages; [ streamly ];
 }
 ```
 
-A sample `sources.nix`. Be careful to spell a name you are overriding from
-nixpack correctly, if the name is different the override wll not
-occur and you will be using the version from nixpack unknowingly:
+A sample `sources.nix`. Be careful to spell attribute name you are
+overriding from nixpack correctly, if the name is different the
+override wll not occur and you will be using the version from nixpack
+unknowingly. Also note that tests are automatically disabled for custom
+derivations defined using the functions from nixpack.sources:
 
 ```
 {nixpack}:
