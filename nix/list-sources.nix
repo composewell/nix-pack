@@ -5,12 +5,10 @@ let
   srcs = import sources { inherit nixpack; };
 
   # merge layer sets if they exist
-  packages = pkgs.lib.attrsets.mergeAttrsList [
-    (pkgs.lib.optionalAttrs (srcs ? layer1) srcs.layer1)
-    (pkgs.lib.optionalAttrs (srcs ? layer2) srcs.layer2)
-    (pkgs.lib.optionalAttrs (srcs ? layer3) srcs.layer3)
-    (pkgs.lib.optionalAttrs (srcs ? other)  srcs.other)
-  ];
+  packages = pkgs.lib.attrsets.mergeAttrsList (
+    (if srcs ? layers then srcs.layers else [])
+    ++ [ (if srcs ? other then srcs.other else {}) ]
+  );
 
   text = builtins.concatStringsSep "\n"
   (builtins.filter (s: s != "")
