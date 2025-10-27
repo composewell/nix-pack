@@ -23,7 +23,9 @@
             name = "nixpack-flake";
             sources = import ./sources.nix {inherit nixpack;};
             packages = import ./packages.nix;
-            compiler = "ghc96";
+            # Use default to utilize the cache,
+            # specific compiler for reproducibility
+            compiler = "default";
             hoogle = false;
             isDev = true;
       };

@@ -25,7 +25,9 @@
             name = "my-project";
             sources = nixpack.lib.mergeSources src1 src2;
             packages = import ./packages.nix;
-            compiler = "ghc96";
+            # Use default to utilize the cache,
+            # specific compiler for reproducibility
+            compiler = "default";
             hoogle = false;
             isDev = true;
       };

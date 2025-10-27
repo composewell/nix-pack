@@ -2,6 +2,7 @@
   name,
   packages,
   sources ? {},
+  # Use default to utilize the cache, specific compiler for reproducibility
   compiler ? "default",
   hoogle ? false,
   isDev ? false
