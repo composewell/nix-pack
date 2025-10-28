@@ -7,6 +7,7 @@ in
   # High level function for use in flake.nix and shell.nix
   mkEnv = import ./env.nix;
   mkOutputs = import ./mkOutputs.nix;
+  mkOutputsSimple = import ./mkOutputsSimple.nix;
 
   # lower level utility functions
   mkShell = import ./mkshell.nix;
