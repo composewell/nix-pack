@@ -47,4 +47,6 @@ in {
   # repositories.
   packages = forAllSystems (system: (mkEnv system).nixpkgs.haskellPackages);
   nixpkgs = forAllSystems (system: (mkEnv system).nixpkgs);
+  inherit nixpack;
+  sources = envOptions.sources;
 }

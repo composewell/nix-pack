@@ -1,4 +1,4 @@
-with import ./sources.nix;
+with import ./mkSources.nix;
 
 let
   cw = "composewell";

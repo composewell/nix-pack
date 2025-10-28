@@ -11,7 +11,7 @@
   };
 
   outputs = { self, nixpkgs, nixpkgs-darwin, nixpack }:
-    nixpack.flakeOutputs {
+    nixpack.mkOutputs {
       inherit nixpkgs;
       inherit nixpkgs-darwin;
       inherit nixpack;
@@ -29,5 +29,5 @@
             hoogle = false;
             isDev = true;
       };
-    } // { inherit nixpack;} ;
+    };
 }

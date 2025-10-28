@@ -1,19 +1,19 @@
 {
   description = "Dev project";
 
-  # Replace "nixpack" with your master package set
+  # Replace "nixpack" with your super package set
   inputs = {
-    nixpack.url = "github:composewell/nixpack/b3db598aa29533646b13a94aca3fee8ead622d06";
-    nixpkgs.follows = "nixpack/nixpkgs";
-    nixpkgs-darwin.follows = "nixpack/nixpkgs-darwin";
+    basepkgs.url = "github:composewell/nixpack/b3db598aa29533646b13a94aca3fee8ead622d06";
+    nixpkgs.follows = "basepkgs/nixpkgs";
+    nixpkgs-darwin.follows = "basepkgs/nixpkgs-darwin";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-darwin, nixpack }:
+  outputs = { self, nixpkgs, nixpkgs-darwin, basepkgs }:
     let
-      nixpack = nixpack.nixpack;
-      src1 = import "${nixpack}/sources.nix" { inherit nixpack; };
+      nixpack = basepkgs.nixpack;
+      src1 = basepkgs.sources;
       src2 = import ./sources.nix {inherit nixpack;};
-    in nixpack.flakeOutputs {
+    in nixpack.mkOutputs {
       inherit nixpkgs;
       inherit nixpkgs-darwin;
       inherit nixpack;

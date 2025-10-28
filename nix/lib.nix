@@ -1,5 +1,5 @@
 let
-  sources = import ./sources.nix;
+  sources = import ./mkSources.nix;
 
   # A simple derivation that copies the bin dir, the etc dir, and additional
   # bin files from src to out dir.

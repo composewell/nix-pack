@@ -6,7 +6,7 @@ in
 {
   # High level function for use in flake.nix and shell.nix
   mkEnv = import ./env.nix;
-  flakeOutputs = import ./flake-outputs.nix;
+  mkOutputs = import ./mkOutputs.nix;
 
   # lower level utility functions
   mkShell = import ./mkshell.nix;
@@ -14,7 +14,7 @@ in
   inherit disableProfiling; # used for creating pkg flakes, see README.
 
 # utility functions to declare sources.
-  sources = import ./sources.nix // import ./composewell.nix;
+  mkSources = import ./mkSources.nix // import ./cwSources.nix;
 # takes sources, returns derivation.
   listSources = import ./list-sources.nix;
   lib = import ./lib.nix;

@@ -1,7 +1,7 @@
 {nixpack}:
 # Package sources to override the nixpkgs package set.
 
-with nixpack.sources;
+with nixpack.mkSources;
 {
 
 layers = [
