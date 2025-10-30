@@ -105,4 +105,20 @@ in
     others = getOthers a // getOthers b;
     jailbreaks = uniq (getJailbreaks a ++ getJailbreaks b);
   };
+
+  haskellSource = name: path: mkSrcs:
+      {
+        layers = [
+        {
+          ${name} = mkSrcs.local path;
+        }
+        ];
+      };
+
+  haskellPackage = name: nixpkgs:
+      {
+      dev-packages =
+      [ nixpkgs.haskellPackages.${name}
+      ];
+      };
 }

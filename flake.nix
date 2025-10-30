@@ -1,4 +1,9 @@
 {
   description = "Nix Haskell Development Environment";
-  outputs = { self }: import ./nix;
+  outputs = { self }:
+    let nixpack = import ./nix;
+    in {
+      nixpack = nixpack;
+      sources = {nixpack}: {};
+    };
 }

@@ -2,10 +2,10 @@
   name,
   packages,
   sources ? {},
-  # Use default to utilize the cache, specific compiler for reproducibility
+  # Use default to utilize the cache, use specific compiler for reproducibility
   compiler ? "default",
-  hoogle ? false,
-  isDev ? false
+  installHoogle ? false,
+  installDocs ? false
 }:
 let
 
@@ -17,7 +17,7 @@ let
   mkoverrides = (import ./overrides.nix) {
     inherit nixpkgs;
     libDepends = cocoa;
-    withHaddock = hoogle;
+    withHaddock = installHoogle;
   };
 
   haskellPackagesOrig = if compiler == "default" then
@@ -94,14 +94,14 @@ let
 
   shell =
     mkshell haskellPackages (p: [ shellPkg ] ++ requiredPackages.devPackages)
-      requiredPackages.packages hoogle true;
+      requiredPackages.packages installHoogle true;
 
   env = nixpkgs.buildEnv {
       name = "${name}";
       paths = requiredPackages.packages ++ requiredPackages.libraries;
       pathsToLink = [ "/share" "/bin" "/local" "/etc" "/lib" "/libexec" "/include" ];
       extraOutputsToInstall =
-        if isDev then
+        if installDocs then
           [ "man"
             "doc"
             "info"

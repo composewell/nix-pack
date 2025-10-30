@@ -1,6 +1,5 @@
 { nixpkgs,
   nixpkgs-darwin,
-  nixpack,
   systems ?
       [
         "x86_64-linux"
@@ -9,7 +8,13 @@
         "aarch64-darwin"
       ],
   nixpkgsOptions ? {},
-  envOptions
+  basepkgs,
+  name,
+  packages,
+  sources ? {nixpack}: {},
+  compiler ? "default",
+  installHoogle ? false,
+  installDocs ? false
 }:
 
 let
@@ -23,6 +28,9 @@ let
       value = f system;
     }) systems);
 
+  sources1 =
+    basepkgs.nixpack.lib.mergeSources
+      basepkgs.sources (sources {nixpack = basepkgs.nixpack;});
   mkEnv = system:
     let
       nixpkgs1 =
@@ -31,22 +39,23 @@ let
         else nixpkgs;
       pkgs = import nixpkgs1 (nixpkgsOptions // { inherit system; });
       pkgs1 = pkgs.extend (self: super: {
-        nixpack = nixpack;
+        nixpack = basepkgs.nixpack;
       });
-      env = import ./env.nix ({
-        compiler = "default";
-        hoogle = false;
-        isDev = false;
-      } // envOptions // {nixpkgs = pkgs1;});
+      env = import ./env.nix {
+        nixpkgs = pkgs1;
+        sources = sources1;
+        inherit name;
+        inherit packages;
+        inherit compiler;
+        inherit installHoogle;
+        inherit installDocs;
+      };
     in env;
 
 in {
   devShells = forAllSystems (system: { default = (mkEnv system).shell; });
-  # This provides a central repository of executables that we can build and
-  # install. We can avoid having individual flake files across multiple
-  # repositories.
   packages = forAllSystems (system: (mkEnv system).nixpkgs.haskellPackages);
   nixpkgs = forAllSystems (system: (mkEnv system).nixpkgs);
-  inherit nixpack;
-  sources = envOptions.sources;
+  nixpack = basepkgs.nixpack;
+  sources = sources1;
 }
