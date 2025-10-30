@@ -1,13 +1,18 @@
 { nixpkgs,
+  basepkgs,
   name,
   packages,
-  sources ? {},
+  sources ? {nixpack}: {},
   # Use default to utilize the cache, use specific compiler for reproducibility
   compiler ? "default",
   installHoogle ? false,
   installDocs ? false
 }:
 let
+
+  sources1 =
+    basepkgs.nixpack.lib.mergeSources
+      basepkgs.sources (sources {nixpack = basepkgs.nixpack;});
 
   cocoa = if builtins.match ".*darwin.*" nixpkgs.system != null then
     [ nixpkgs.darwin.apple_sdk.frameworks.Cocoa ]
@@ -33,18 +38,18 @@ let
 
   allLayers =
     foldExtend
-      (if sources ? layers then sources.layers else [])
+      (if sources1 ? layers then sources1.layers else [])
       haskellPackagesOrig;
 
   haskellPackages =
-    if sources ? jailbreaks then
+    if sources1 ? jailbreaks then
       let
         overrides = self: super:
           with nixpkgs.haskell.lib;
           builtins.listToAttrs (map (name: {
             inherit name;
             value = doJailbreak super.${name};
-          }) sources.jailbreaks);
+          }) sources1.jailbreaks);
       in allLayers.extend overrides
     else allLayers;
 
@@ -114,4 +119,5 @@ in {
   nixpkgs = nixpkgs1;
   inherit shell;
   inherit env;
+  sources = sources1;
 }

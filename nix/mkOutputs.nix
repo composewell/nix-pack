@@ -28,9 +28,6 @@ let
       value = f system;
     }) systems);
 
-  sources1 =
-    basepkgs.nixpack.lib.mergeSources
-      basepkgs.sources (sources {nixpack = basepkgs.nixpack;});
   mkEnv = system:
     let
       nixpkgs1 =
@@ -43,9 +40,10 @@ let
       });
       env = import ./env.nix {
         nixpkgs = pkgs1;
-        sources = sources1;
+        inherit basepkgs;
         inherit name;
         inherit packages;
+        inherit sources;
         inherit compiler;
         inherit installHoogle;
         inherit installDocs;
@@ -56,6 +54,6 @@ in {
   devShells = forAllSystems (system: { default = (mkEnv system).shell; });
   packages = forAllSystems (system: (mkEnv system).nixpkgs.haskellPackages);
   nixpkgs = forAllSystems (system: (mkEnv system).nixpkgs);
+  sources = forAllSystems (system: (mkEnv system).sources);
   nixpack = basepkgs.nixpack;
-  sources = sources1;
 }
